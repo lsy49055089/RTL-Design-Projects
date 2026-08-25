@@ -212,7 +212,7 @@ module mux_8x1 (
 
     // mux, * = all input : sensitivity list
 
-    always @(*  /*in0,in1,in2,in3,sel*/) begin
+    always @(*) begin
         case (sel)
             3'b000:  out_reg = in0;
             3'b001:  out_reg = in1;
