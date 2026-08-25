@@ -54,6 +54,16 @@ Digilent Basys3 보드에서 동작하는 디지털 시계와 스톱워치 통�
 - 센서 timing, timeout 및 checksum 처리
 
 
+## Continuous Integration
+
+GitHub Actions에서 Icarus Verilog로 RV32I와 Stopwatch RTL의 SystemVerilog/Verilog elaboration을 자동 검사합니다.
+
+```bash
+bash scripts/check_rtl.sh
+```
+
+> 공개 소스가 완전한 두 프로젝트만 CI 대상으로 삼았습니다. Vivado Block Design과 원본 UART/FIFO 하위 RTL이 필요한 프로젝트는 문서에 별도 범위를 표시합니다.
+
 ---
 
 ## Portfolio Navigation
