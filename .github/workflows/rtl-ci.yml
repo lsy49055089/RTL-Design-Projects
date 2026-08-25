@@ -1,0 +1,31 @@
+name: RTL Design CI
+
+on:
+  push:
+    paths:
+      - "fpga-rv32i-single-cycle/**"
+      - "fpga-stopwatch-watch/**"
+      - "scripts/check_rtl.sh"
+      - ".github/workflows/rtl-ci.yml"
+  pull_request:
+    paths:
+      - "fpga-rv32i-single-cycle/**"
+      - "fpga-stopwatch-watch/**"
+      - "scripts/check_rtl.sh"
+      - ".github/workflows/rtl-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  elaborate-rtl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+      - name: Elaborate public RTL
+        run: bash scripts/check_rtl.sh
