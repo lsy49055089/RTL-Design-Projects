@@ -2,6 +2,8 @@
 
 Verilog·SystemVerilog 기반 RTL 설계와 FPGA 시스템 구현 결과를 정리한 포트폴리오 저장소입니다.
 
+**Portfolio focus:** RTL architecture · FPGA system integration · functional verification
+
 > **Related Conference Paper:** [Parallel Decision Tree Hardware](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) — 현재 노드와 좌·우 자식 노드를 병렬 계산하고, 논문 명세의 4-state FSM으로 제어한 RTL 설계입니다.
 
 ## Projects
@@ -50,3 +52,10 @@ Digilent Basys3 보드에서 동작하는 디지털 시계와 스톱워치 통�
 - MicroBlaze와 AXI4-Lite Custom IP 기반 HW/SW 통합
 - SystemVerilog/Verilog 테스트벤치와 파형 기반 기능 검증
 - 센서 timing, timeout 및 checksum 처리
+
+
+---
+
+## Portfolio Navigation
+
+[Conference Paper](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [Edge AI / CV](https://github.com/lsy49055089/AI-Projects)
