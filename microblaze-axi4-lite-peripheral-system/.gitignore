@@ -1,0 +1,40 @@
+# Vivado generated files
+*.jou
+*.log
+*.str
+*.dcp
+*.bit
+*.ltx
+.Xil/
+*.cache/
+*.gen/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/
+
+# Vitis generated files
+Debug/
+Release/
+_ide/
+_ide_temp/
+.metadata/
+*.elf
+*.xsa
+
+# Simulation and coverage
+simv*
+csrc/
+ucli.key
+*.vpd
+*.fsdb
+*.vdb
+*.ucdb
+DVEfiles/
+verdiLog/
+
+# Local/editor files
+.DS_Store
+*.swp
+*.tmp

@@ -1,0 +1,12 @@
+#ifndef APP_CONFIG_H
+#define APP_CONFIG_H
+
+#include "xparameters.h"
+
+#define APP_CUSTOM_UART_BASE XPAR_UART_0_S00_AXI_BASEADDR
+
+#define APP_FIRST_TX_VALUE 0x55U
+#define APP_TX_INTERVAL_US 500000U
+#define APP_UART_TIMEOUT   1000000U
+
+#endif

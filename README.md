@@ -6,6 +6,15 @@ Verilog·SystemVerilog 기반 RTL 설계와 FPGA 시스템 구현 결과를 정�
 
 ## Projects
 
+### [MicroBlaze AXI4-Lite Peripheral System](./microblaze-axi4-lite-peripheral-system)
+
+MicroBlaze가 5개의 AXI4-Lite Custom IP를 제어하고, 두 대의 Basys3가 UART/SPI로 데이터를 교환하도록 구성한 개인 HW/SW 통합 프로젝트입니다.
+
+- **Stack:** Verilog, SystemVerilog, UVM, Vitis C, Xilinx Vivado, Basys3 FPGA
+- **Architecture:** MicroBlaze, AXI Interconnect, GPIO/Timer/UART/SPI/I2C LCD Custom IP, Slave RTL
+- **Key Features:** MMIO Driver, 2-Board UART/SPI, I2C LCD, SPI 32/32 PASS, I2C 30/30 PASS
+- **My Role:** Custom IP와 Register Map 설계, Vitis C 제어, Slave RTL, UVM 검증, 보드 통합
+
 ### [RV32I Single-Cycle CPU](./fpga-rv32i-single-cycle)
 
 SystemVerilog로 32-bit RISC-V Single-Cycle CPU의 Control Unit과 전체 Datapath를 설계한 개인 프로젝트입니다.
@@ -38,5 +47,6 @@ Digilent Basys3 보드에서 동작하는 디지털 시계와 스톱워치 통�
 - RISC-V ISA 기반 CPU Control Unit 및 Datapath 설계
 - FSM 및 Datapath 기반 RTL 설계
 - FPGA 주변장치와 UART/FIFO 시스템 통합
+- MicroBlaze와 AXI4-Lite Custom IP 기반 HW/SW 통합
 - SystemVerilog/Verilog 테스트벤치와 파형 기반 기능 검증
 - 센서 timing, timeout 및 checksum 처리
