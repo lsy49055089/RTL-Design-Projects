@@ -10,6 +10,16 @@ Verilog·SystemVerilog 기반 RTL 설계와 FPGA 시스템 구현 결과를 정�
 
 ## Projects
 
+### [FPGA VGA Conductor Game](./fpga-vga-conductor-game)
+
+OV7670 영상에서 RED/GREEN 객체 좌표를 추출하고 FPGA 게임 로직과 Python MAESTRO UI를 UART로 연동한 7인 팀 프로젝트입니다.
+
+- **Stack:** SystemVerilog, FPGA, OV7670, UART, Python, PySide6, MIDI
+- **Architecture:** RGB Filter → XY Detection → Game Logic → UART Wrapper → PC Application
+- **Key Features:** 지휘봉/손 좌표 추출, 4박 패턴, BPM·음량·점수, VGA Capture, MAESTRO UI
+- **My Role:** `xy_detection`·`song_decoder` RTL/TB, 속도 기능 명세, FPGA-PC Interface와 MAESTRO UI 연동, Frame Delay/QVGA-VGA 좌표 이슈 해결
+- **Team Source:** [realisshoon/fpga-vga-conductor-game](https://github.com/realisshoon/fpga-vga-conductor-game)
+
 ### [MicroBlaze AXI4-Lite Peripheral System](./microblaze-axi4-lite-peripheral-system)
 
 MicroBlaze가 5개의 AXI4-Lite Custom IP를 제어하고, 두 대의 Basys3가 UART/SPI로 데이터를 교환하도록 구성한 개인 HW/SW 통합 프로젝트입니다.
@@ -52,6 +62,7 @@ Digilent Basys3 보드에서 동작하는 디지털 시계와 스톱워치 통�
 - FSM 및 Datapath 기반 RTL 설계
 - FPGA 주변장치와 UART/FIFO 시스템 통합
 - MicroBlaze와 AXI4-Lite Custom IP 기반 HW/SW 통합
+- 실시간 영상 좌표 처리와 FPGA-PC Interface 통합
 - SystemVerilog/Verilog 테스트벤치와 파형 기반 기능 검증
 - 센서 timing, timeout 및 checksum 처리
 
