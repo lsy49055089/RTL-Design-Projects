@@ -1,8 +1,10 @@
 # MicroBlaze AXI4-Lite Peripheral System
 
-MicroBlaze가 AXI4-Lite MMIO로 5개의 Custom Peripheral IP를 제어하고, 두 대의 Basys3가 UART와 SPI로 데이터를 교환하도록 구성한 FPGA HW/SW 통합 프로젝트입니다. Master 보드에는 Processor·Custom IP·Vitis C를, Slave 보드에는 순수 SystemVerilog UART RX·SPI Slave RTL을 적용했습니다.
+GPIO·Timer·UART·SPI·I2C LCD의 5종 AXI4-Lite Custom IP를 구현하고, MicroBlaze 기반 GPIO·UART·SPI·I2C LCD 제어와 두 대의 Basys3 간 UART/SPI 통신을 통합한 FPGA HW/SW 프로젝트입니다. Master 보드에는 Processor·Custom IP·Vitis C를, Slave 보드에는 순수 SystemVerilog UART RX·SPI Slave RTL을 적용했습니다.
 
 > 개인 프로젝트 · 2026.06.22 - 2026.06.30 · Verilog/SystemVerilog · UVM · Vitis C · Vivado 2020.2
+
+> **구현과 시연 범위:** Timer IP는 RTL/Register Map 구현에 포함됩니다. 최종 Vitis 데모의 Count-Up은 소프트웨어 변수로 처리했으며, Timer IP를 통한 카운트 제어는 시연 범위에 포함하지 않습니다.
 
 ## Architecture
 

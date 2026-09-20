@@ -17,6 +17,12 @@ FPGA는 영상 기반 좌표 추출과 게임 제어를 담당하고, PC 애플�
 
 ![BPM 기반 점수 계산 화면](https://raw.githubusercontent.com/realisshoon/fpga-vga-conductor-game/main/docs/images/demo-bpm-score.jpg)
 
+### 군집화 적용 후 좌표 출력 및 PC UI 연동
+
+![군집화 적용 후 RED/GREEN 좌표를 표시한 MAESTRO UI](./docs/images/maestro-clustering-result.png)
+
+지휘봉·손 표식 이외의 빨강·초록 물체가 함께 검출되는 문제에 대응해 군집화를 적용했습니다. 산출한 좌표를 PC로 전달하여 검출 영상 위에 표시한 결과입니다. 이 이미지는 적용 후 동작 화면이며, 개선 전후의 정량 비교 결과는 아닙니다.
+
 ## System Flow
 
 ```text
@@ -42,7 +48,7 @@ Python MAESTRO UI / MIDI / Capture
 | Area | Implementation |
 |---|---|
 | Camera / Video | OV7670, 320×240 frame processing, VGA 640×480 output |
-| Object Tracking | RED/GREEN color detection, Bounding Box center coordinate |
+| Object Tracking | RED/GREEN color detection, clustering, Bounding Box center coordinate |
 | Game Logic | 4-beat Zone FSM, tempo, volume, score, song selection |
 | Communication | Ready/Valid based internal transfer, UART PC link |
 | PC Application | PySide6 MAESTRO UI, MIDI playback, Capture ON/OFF, result scene |
@@ -53,9 +59,11 @@ Python MAESTRO UI / MIDI / Capture
 ### 1. `xy_detection` RTL Design & Verification
 
 - RED/GREEN 검출 픽셀을 프레임 단위로 누적해 Bounding Box Min/Max 계산
+- 지휘봉·손 표식 이외의 RED/GREEN 물체가 함께 검출되는 문제에 대응해 군집화 적용
 - Stick/Hand 중심 좌표 계산과 미검출 좌표 처리
 - `xy_control_ready/valid` 기반 좌표 전달 Handshake 구성
-- 프레임 종료 시점과 좌표 갱신 타이밍 정리
+- 다음 프레임 시작 전에 좌표 계산을 마치도록 내부 동기 펄스(가상 VSYNC)를 구성하고, 다른 모듈에 좌표를 전달하는 기준 신호로 사용
+- 좌표 계산 완료·전달·다음 프레임 초기화 시점을 분리
 - 이전 프레임 좌표가 다음 프레임에 전달되던 **Frame Delay 문제를 발견하고 갱신 타이밍 수정**
 - `xy_detection` Testbench 수정 및 Stick/Hand 좌표 출력 검증
 
@@ -92,9 +100,10 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 
 | Decision | Reason |
 |---|---|
-| Frame-based coordinate update | 한 프레임 동안 검출 픽셀을 누적한 뒤 프레임 종료 시 중심 좌표를 확정해 Pixel 단위 노이즈가 바로 게임 상태로 전달되지 않도록 구성 |
+| Clustering | 표식 외의 RED/GREEN 물체도 함께 검출되어 좌표 산출에 영향을 주는 문제에 대응 |
+| Coordinate synchronization pulse | 다음 프레임 전에 계산을 완료하고, 내부 동기 펄스를 기준으로 다른 모듈에 좌표를 전달 |
 | Bounding Box center | 검출된 색상 영역의 Min/Max 범위를 이용해 단일 Pixel이 아닌 객체 중심을 지휘 입력으로 사용 |
-| Ready/Valid handshake | 좌표·게임 데이터의 생성 시점과 UART 소비 시점을 분리해 모듈 간 데이터 전달 안정성 확보 |
+| Ready/Valid handshake | 후단 모듈이 좌표를 수신할 때까지 유효한 데이터를 유지하도록 전달 조건 구성 |
 | FPGA / PC role separation | 실시간 좌표·게임 판정은 FPGA, UI·MIDI·영상 연출은 PC가 담당해 각 플랫폼의 역할을 분리 |
 
 ## Verification & Troubleshooting
@@ -112,7 +121,7 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 
 ## Result
 
-카메라 영상에서 추출한 지휘봉·손 좌표를 FPGA 게임 로직과 PC 애플리케이션까지 연결하면서, **Frame 단위 영상 데이터 → RTL 좌표 처리 → Handshake → UART → UI/MIDI**로 이어지는 전체 데이터 경로를 통합했습니다.
+카메라 영상에서 추출한 지휘봉·손 좌표를 FPGA 게임 로직과 PC 애플리케이션까지 연결하면서, **Frame 단위 영상 데이터 → RTL 좌표 처리 → Handshake → UART → UI/MIDI**로 이어지는 시스템에서 좌표 처리 RTL과 PC UI 연동을 담당했습니다.
 
 특히 `xy_detection`의 Frame Delay와 QVGA/VGA 좌표 기준 차이를 직접 확인하면서, 기능 구현뿐 아니라 **모듈 간 Timing과 Interface 기준을 맞추는 과정이 시스템 통합에서 중요하다는 점**을 경험했습니다.
 

@@ -17,12 +17,12 @@ OV7670 영상에서 RED/GREEN 객체 좌표를 추출하고 FPGA 게임 로직�
 - **Stack:** SystemVerilog, FPGA, OV7670, UART, Python, PySide6, MIDI
 - **Architecture:** RGB Filter → XY Detection → Game Logic → UART Wrapper → PC Application
 - **Key Features:** 지휘봉/손 좌표 추출, 4박 패턴, BPM·음량·점수, VGA Capture, MAESTRO UI
-- **My Role:** `xy_detection`·`song_decoder` RTL/TB, 속도 기능 명세, FPGA-PC Interface와 MAESTRO UI 연동, Frame Delay/QVGA-VGA 좌표 이슈 해결
+- **My Role:** `xy_detection`·`song_decoder` RTL/TB, 속도 기능 명세, FPGA-PC Interface와 MAESTRO UI 연동, 군집화와 좌표 전달용 동기 신호 적용, Frame Delay/QVGA-VGA 좌표 이슈 해결
 - **Team Source:** [realisshoon/fpga-vga-conductor-game](https://github.com/realisshoon/fpga-vga-conductor-game)
 
 ### [MicroBlaze AXI4-Lite Peripheral System](./microblaze-axi4-lite-peripheral-system)
 
-MicroBlaze가 5개의 AXI4-Lite Custom IP를 제어하고, 두 대의 Basys3가 UART/SPI로 데이터를 교환하도록 구성한 개인 HW/SW 통합 프로젝트입니다.
+5종 AXI4-Lite Custom IP를 구현하고, MicroBlaze 기반 GPIO·UART·SPI·I2C LCD 제어와 두 대의 Basys3 간 UART/SPI 통신을 통합한 개인 HW/SW 프로젝트입니다. Timer IP는 구현 범위에 포함되며, 최종 Vitis 데모의 카운트 기능은 소프트웨어 변수로 처리했습니다.
 
 - **Stack:** Verilog, SystemVerilog, UVM, Vitis C, Xilinx Vivado, Basys3 FPGA
 - **Architecture:** MicroBlaze, AXI Interconnect, GPIO/Timer/UART/SPI/I2C LCD Custom IP, Slave RTL
