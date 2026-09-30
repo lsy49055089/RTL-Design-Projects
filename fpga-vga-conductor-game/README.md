@@ -1,6 +1,6 @@
 # FPGA VGA Conductor Game
 
-> **Team Project · 2026.08.31 - 2026.09.08**  
+> **Team Project · 2026.08.31 - 2026.09.07**
 > 실제 소스 코드와 공동 작업 이력은 [원본 팀 저장소](https://github.com/realisshoon/fpga-vga-conductor-game)에서 확인할 수 있습니다.
 
 ## Project Summary
@@ -62,7 +62,7 @@ Python MAESTRO UI / MIDI / Capture
 - 지휘봉·손 표식 이외의 RED/GREEN 물체가 함께 검출되는 문제에 대응해 군집화 적용
 - Stick/Hand 중심 좌표 계산과 미검출 좌표 처리
 - `xy_control_ready/valid` 기반 좌표 전달 Handshake 구성
-- 다음 프레임 시작 전에 좌표 계산을 마치도록 내부 동기 펄스(가상 VSYNC)를 구성하고, 다른 모듈에 좌표를 전달하는 기준 신호로 사용
+- 좌표 계산·출력·초기화 시점을 조정하고, 내부 동기 펄스(가상 VSYNC)를 다른 모듈에 좌표를 전달하는 기준 신호로 사용
 - 좌표 계산 완료·전달·다음 프레임 초기화 시점을 분리
 - 이전 프레임 좌표가 다음 프레임에 전달되던 **Frame Delay 문제를 발견하고 갱신 타이밍 수정**
 - `xy_detection` Testbench 수정 및 Stick/Hand 좌표 출력 검증
@@ -101,7 +101,7 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 | Decision | Reason |
 |---|---|
 | Clustering | 표식 외의 RED/GREEN 물체도 함께 검출되어 좌표 산출에 영향을 주는 문제에 대응 |
-| Coordinate synchronization pulse | 다음 프레임 전에 계산을 완료하고, 내부 동기 펄스를 기준으로 다른 모듈에 좌표를 전달 |
+| Coordinate synchronization pulse | 좌표 계산·출력·초기화 시점을 분리하고, 내부 동기 펄스로 다른 모듈과 좌표 전달 시점을 맞춤 |
 | Bounding Box center | 검출된 색상 영역의 Min/Max 범위를 이용해 단일 Pixel이 아닌 객체 중심을 지휘 입력으로 사용 |
 | Ready/Valid handshake | 후단 모듈이 좌표를 수신할 때까지 유효한 데이터를 유지하도록 전달 조건 구성 |
 | FPGA / PC role separation | 실시간 좌표·게임 판정은 FPGA, UI·MIDI·영상 연출은 PC가 담당해 각 플랫폼의 역할을 분리 |

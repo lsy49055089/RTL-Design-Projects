@@ -35,7 +35,7 @@ SystemVerilog로 32-bit RISC-V Single-Cycle CPU의 Control Unit과 전체 Datapa
 
 - **Stack:** SystemVerilog, RISC-V RV32I, Xilinx Vivado
 - **Architecture:** Control Unit, PC, Register File, ALU, Immediate, Instruction/Data Memory
-- **Key Features:** 37개 RV32I 명령어, Load/Store, Branch/JAL/JALR
+- **Key Features:** 37개 RV32I 명령어 구현, Load/Store, Branch/JAL/JALR, 원본·수정 Bubble Sort 이미지 자동 결과 확인
 - **My Role:** CPU RTL 전체 설계, instruction decode, memory access, testbench 및 waveform 분석
 
 ### [FPGA UART/FIFO Sensor Control System](./fpga-uart-fifo-sensor-system)
@@ -73,7 +73,10 @@ GitHub Actions에서 Icarus Verilog로 RV32I와 Stopwatch RTL의 SystemVerilog/V
 
 ```bash
 bash scripts/check_rtl.sh
+bash fpga-rv32i-single-cycle/scripts/run_sort_reproduction.sh
 ```
+
+RV32I는 추가로 원본 Bubble Sort 이미지와 정렬 조건을 수정한 프로그램을 실행해 결과 배열을 자동 비교합니다. 이 테스트는 프로그램 단위 결과 확인이며, 37개 명령어의 모든 동작 조건이나 타이밍 검증을 의미하지 않습니다.
 
 > 공개 소스가 완전한 두 프로젝트만 CI 대상으로 삼았습니다. Vivado Block Design과 원본 UART/FIFO 하위 RTL이 필요한 프로젝트는 문서에 별도 범위를 표시합니다.
 
