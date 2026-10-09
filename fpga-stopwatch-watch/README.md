@@ -99,5 +99,3 @@ fpga-stopwatch-watch/
 4. `toptop`을 Top Module로 지정합니다.
 5. 시뮬레이션 시 `tb/tb_watch.v`를 Simulation Sources에 추가합니다.
 6. Synthesis, Implementation, Bitstream Generation 후 Basys3에 Program합니다.
-
-> 제출본의 RTL 동작은 유지했으며, 포트폴리오 정리 과정에서 Testbench 출력 폭과 사용하지 않는 `sw[2]` Constraint만 Top Module 인터페이스에 맞게 정리했습니다.
