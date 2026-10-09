@@ -89,8 +89,6 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 
 ### 4. Conducting Speed Function Specification
 
-속도 계산 RTL 전체 구현을 개인 기여로 주장하지 않고, 초기 기능 설계 단계에서 담당한 범위만 구분했습니다.
-
 - 지휘봉 속도 계산 기능 요구사항 정의
 - `stick_speed_calc` 역할·입출력·비트폭·계산 타이밍 정의
 - 프레임 기반 지휘 좌표 입력과 이전 좌표 저장 구조 설계
@@ -117,7 +115,7 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 
 ### Team-level Verification
 
-최종 팀 시스템에서는 RG Detect, Game Logic, UART Wrapper를 대상으로 UVM Scoreboard, Functional Coverage, Assertion 기반 검증을 수행했습니다. 이 항목은 **팀 전체 검증 결과**이며 개인 담당 범위와 구분합니다.
+팀 통합 검증에서는 RG Detect, Game Logic, UART Wrapper를 대상으로 UVM Scoreboard, Functional Coverage, Assertion을 적용했습니다.
 
 ## Result
 
@@ -129,5 +127,4 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 
 - **Original Team Repository:** [realisshoon/fpga-vga-conductor-game](https://github.com/realisshoon/fpga-vga-conductor-game)
 - **Project Type:** 7-person Team Project
-- 이 디렉터리는 개인 포트폴리오용 설명 문서이며 팀 소스 코드를 복사하지 않았습니다.
-- 팀 전체 기능과 개인 기여를 구분해 작성했으며, 실제 RTL/Python 소스와 공동 이력은 원본 팀 저장소를 기준으로 합니다.
+- **Source:** RTL/Python 소스와 공동 작업 이력은 원본 팀 저장소에서 확인할 수 있습니다.
