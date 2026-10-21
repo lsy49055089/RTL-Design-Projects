@@ -10,6 +10,16 @@ Verilog·SystemVerilog 기반 RTL 설계와 FPGA 시스템 구현 결과를 정�
 
 ## Projects
 
+### [CNN 모션인식 SoC 플랫폼](./zynq-cnn-motion-robot-soc)
+
+두 카메라의 CNN 관절 인식·스테레오 3D 복원을 Zynq 기반 5축 로봇팔 제어로 연결한 7인 팀 프로젝트입니다. 최종 프로젝트 경진대회에서 **최우수상**을 수상했습니다(2026.10.15 · 5개 팀 중 2위).
+
+- **Stack:** Zynq-7000, Verilog, AXI4-Lite, C, Vivado/Vitis, DDR, SD/FatFS, UART, Unity/C#
+- **Architecture:** Camera/CNN → Stereo 3D → Joint Command → PS C Control → AXI4-Lite PWM IP → Robot Arm / Unity
+- **My Role:** PWM Core·Custom IP·C 출력 제어, 20 ms Record/Replay·DDR/SD 저장, 그리퍼·좌표 도약 처리, Unity 가상환경
+- **Verification:** PC 모의 기반 C 회귀 LEFT 16 / RIGHT 16, PC 모니터 131개 테스트, 최종 실물 통합 시연
+- **Team Source:** [realisshoon/zynq-cnn-motion-robot-soc](https://github.com/realisshoon/zynq-cnn-motion-robot-soc)
+
 ### [FPGA VGA Conductor Game](./fpga-vga-conductor-game)
 
 OV7670 영상에서 RED/GREEN 객체 좌표를 추출하고 FPGA 게임 로직과 Python MAESTRO UI를 UART로 연동한 7인 팀 프로젝트입니다.
@@ -62,6 +72,7 @@ Digilent Basys3 보드에서 동작하는 디지털 시계와 스톱워치 통�
 - FSM 및 Datapath 기반 RTL 설계
 - FPGA 주변장치와 UART/FIFO 시스템 통합
 - MicroBlaze와 AXI4-Lite Custom IP 기반 HW/SW 통합
+- Zynq PS–PL 제어, 5축 PWM 출력과 DDR/SD 기반 동작 기록·재생
 - 실시간 영상 좌표 처리와 FPGA-PC Interface 통합
 - SystemVerilog/Verilog 테스트벤치와 파형 기반 기능 검증
 - 센서 timing, timeout 및 checksum 처리
