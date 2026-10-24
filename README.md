@@ -6,7 +6,7 @@ Verilog·SystemVerilog 기반 RTL 설계와 FPGA 시스템 구현 결과를 정�
 
 [![RTL Design CI](https://github.com/lsy49055089/RTL-Design-Projects/actions/workflows/rtl-ci.yml/badge.svg)](https://github.com/lsy49055089/RTL-Design-Projects/actions/workflows/rtl-ci.yml)
 
-> **Related Conference Paper:** [Parallel Decision Tree Hardware](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) — 현재 노드와 좌·우 자식 노드를 병렬 계산하고, 논문 명세의 4-state FSM으로 제어한 RTL 설계입니다.
+> **Related Conference Paper:** [Parallel Decision Tree Hardware](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) — 현재 노드와 좌·우 자식 후보를 동시에 평가하는 3-UN 병렬 Datapath와 탐색 제어 FSM을 직접 설계한 연구입니다.
 
 ## Projects
 
