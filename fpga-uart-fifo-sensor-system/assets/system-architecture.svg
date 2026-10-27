@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1190" viewBox="0 0 1800 1190" role="img">
+<title>UART FIFO sensor system: command, data and display-control paths</title>
+<rect width="1800" height="1190" fill="white"/>
+<text x="40" y="40" font-family="Arial, sans-serif" font-size="30" font-weight="700" text-anchor="start" fill="#202421">UART / FIFO / Sensor System</text>
+<rect x="40" y="75" width="250" height="130" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="165.0" y="114.47" font-family="Arial, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#202421">PC command</text>
+<text x="165.0" y="147.82" font-family="Arial, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#202421">R / L / U / D</text>
+<text x="165.0" y="181.17000000000002" font-family="Arial, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#202421">M / T / S</text>
+<rect x="350" y="75" width="300" height="130" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="500.0" y="115.58" font-family="Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#202421">UART RX + RX FIFO</text>
+<text x="500.0" y="147.48" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#202421">9600 bps / 8-bit</text>
+<text x="500.0" y="179.38" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#202421">Receive and buffer bytes</text>
+<rect x="710" y="75" width="350" height="130" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="885.0" y="115.58" font-family="Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#202421">ASCII Decoder</text>
+<text x="885.0" y="147.48" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#202421">R/L/U/D: control pulses</text>
+<text x="885.0" y="179.38" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#202421">M/T: selection / S: send</text>
+<rect x="1230" y="75" width="535" height="130" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="1497.5" y="114.47" font-family="Arial, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#202421">Timing references</text>
+<text x="1497.5" y="147.82" font-family="Arial, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#202421">Clock: 100 MHz / Sensor tick: 1 us</text>
+<text x="1497.5" y="181.17000000000002" font-family="Arial, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#202421">Time counters: 100 Hz</text>
+<polyline points="290,140 350,140" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="350,140 338.0,145.0 338.0,135.0" fill="#39413b"/>
+<polyline points="650,140 710,140" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="710,140 698.0,145.0 698.0,135.0" fill="#39413b"/>
+<rect x="40" y="255" width="310" height="140" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="195.0" y="301.69" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#202421">Board switch</text>
+<text x="195.0" y="332.14" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#202421">Time display window</text>
+<text x="195.0" y="362.59" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#202421">sec + fraction / hour + min</text>
+<rect x="430" y="285" width="1335" height="65" fill="#f1f2f1" stroke="#39413b" stroke-width="2"/>
+<text x="1097.5" y="325.66" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#202421">Control signals: R/L/U/D, M[1:0], T[1:0], S, sw</text>
+<polyline points="885,205 885,285" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="885,285 880.0,273.0 890.0,273.0" fill="#39413b"/>
+<polyline points="350,320 430,320" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="430,320 418.0,325.0 418.0,315.0" fill="#39413b"/>
+<text x="390" y="306" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="middle" fill="#202421">sw</text>
+<rect x="40" y="470" width="310" height="175" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="195.0" y="533.08" font-family="Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#202421">Board buttons</text>
+<text x="195.0" y="564.98" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#202421">R / L / U / D</text>
+<text x="195.0" y="596.88" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#202421">Debounce + local control</text>
+<rect x="430" y="430" width="700" height="260" fill="#f1f2f1" stroke="#39413b" stroke-width="2"/>
+<text x="780" y="466" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#202421">Functional modules</text>
+<rect x="455" y="490" width="310" height="75" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="610.0" y="519.8" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#202421">00: Stopwatch</text>
+<text x="610.0" y="548.8" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#202421">Run / Clear / Moment</text>
+<rect x="790" y="490" width="315" height="75" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="947.5" y="519.8" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#202421">01: Watch</text>
+<text x="947.5" y="548.8" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#202421">Hour / minute / second</text>
+<rect x="455" y="590" width="310" height="75" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="610.0" y="619.8" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#202421">10: DHT11</text>
+<text x="610.0" y="648.8" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#202421">40-bit receive / checksum</text>
+<rect x="790" y="590" width="315" height="75" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="947.5" y="620.1850000000001" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="middle" fill="#202421">11: HC-SR04</text>
+<text x="947.5" y="647.735" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="middle" fill="#202421">Echo width / distance / timeout</text>
+<polyline points="350,555 430,555" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="430,555 418.0,560.0 418.0,550.0" fill="#39413b"/>
+<polyline points="780,350 780,430" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="780,430 775.0,418.0 785.0,418.0" fill="#39413b"/>
+<text x="800" y="399" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#202421">R/L/U/D + M/T</text>
+<rect x="1230" y="430" width="245" height="180" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="1352.5" y="483.3" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#202421">Shared FND</text>
+<text x="1352.5" y="512.3" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#202421">Time / temp / humidity</text>
+<text x="1352.5" y="541.3" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#202421">Distance / timeout</text>
+<text x="1352.5" y="570.3" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#202421">4-digit scanning</text>
+<polyline points="1350,350 1350,430" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="1350,430 1345.0,418.0 1355.0,418.0" fill="#39413b"/>
+<text x="1370" y="399" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#202421">M/T + sw</text>
+<polyline points="1130,550 1230,550" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="1230,550 1218.0,555.0 1218.0,545.0" fill="#39413b"/>
+<text x="1180" y="534" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="middle" fill="#202421">Data</text>
+<rect x="1230" y="790" width="300" height="155" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="1380.0" y="828.965" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#202421">ASCII Sender</text>
+<text x="1380.0" y="859.4150000000001" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#202421">Select by M/T</text>
+<text x="1380.0" y="889.865" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#202421">Start by S</text>
+<text x="1380.0" y="920.315" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#202421">Serialize time / sensor data</text>
+<polyline points="1650,350 1650,730 1380,730 1380,790" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="1380,790 1375.0,778.0 1385.0,778.0" fill="#39413b"/>
+<text x="1667" y="575" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#202421">S + M/T</text>
+<polyline points="780,690 780,867 1230,867" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="1230,867 1218.0,872.0 1218.0,862.0" fill="#39413b"/>
+<text x="1000" y="850" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#202421">Time / sensor data</text>
+<rect x="1590" y="790" width="175" height="155" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="1677.5" y="832.635" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="middle" fill="#202421">TX FIFO</text>
+<text x="1677.5" y="860.185" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="middle" fill="#202421">UART TX</text>
+<text x="1677.5" y="887.735" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="middle" fill="#202421">Buffer + transmit</text>
+<text x="1677.5" y="915.285" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="middle" fill="#202421">serial frames</text>
+<polyline points="1530,867 1590,867" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="1590,867 1578.0,872.0 1578.0,862.0" fill="#39413b"/>
+<text x="1560" y="846" font-family="Arial, sans-serif" font-size="16" font-weight="400" text-anchor="middle" fill="#202421">8-bit</text>
+<rect x="1230" y="1010" width="535" height="120" fill="white" stroke="#39413b" stroke-width="2"/>
+<text x="1497.5" y="1061.145" font-family="Arial, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#202421">PC receive</text>
+<text x="1497.5" y="1094.495" font-family="Arial, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#202421">Time / sensor ASCII response</text>
+<polyline points="1678,945 1678,1010" fill="none" stroke="#39413b" stroke-width="2.5"/>
+<polygon points="1678,1010 1673.0,998.0 1683.0,998.0" fill="#39413b"/>
+<text x="1715" y="982" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start" fill="#202421">UART</text>
+<text x="40" y="1150" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="start" fill="#202421">M: mode selection   T: output selection   S: start response</text>
+</svg>

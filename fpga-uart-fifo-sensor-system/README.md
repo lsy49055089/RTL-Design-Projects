@@ -6,7 +6,7 @@ Digilent Basys3 FPGA에서 **Stopwatch, Watch, DHT11, HC-SR04, UART/FIFO 통신�
 
 ## System Architecture
 
-![System architecture](./assets/system-architecture.png)
+![System architecture](./assets/system-architecture.svg)
 
 PC에서 전달한 ASCII 명령은 `UART RX -> FIFO -> ASCII Decoder` 경로를 거쳐 모드와 버튼 제어 신호로 변환됩니다. 각 기능 블록의 결과는 공용 FND Datapath와 `ASCII Sender -> FIFO -> UART TX` 경로로 전달됩니다.
 
