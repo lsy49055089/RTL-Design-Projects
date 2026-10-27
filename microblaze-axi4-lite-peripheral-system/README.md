@@ -78,7 +78,7 @@ MicroBlaze는 AXI Interconnect를 통해 각 Peripheral의 Register Map에 접�
 | `verification/spi_uvm/` | AXI-Lite 기반 SPI UVM 환경 |
 | `verification/i2c_uvm/` | I2C Master/Slave UVM 환경 |
 
-## Reproduction Notes and Limitations
+## 실행 조건
 
 - Vivado/Vitis에서 자동 생성되는 output products, bitstream, BSP, `xparameters.h`, linker script는 저장소에서 제외했습니다. `design_1.bd`로 Hardware Platform을 다시 생성해야 합니다.
 - Custom IP를 Vivado IP Catalog에 package한 뒤 Block Design의 IP version과 address map을 확인해야 합니다.

@@ -77,7 +77,7 @@ SystemVerilog로 구현한 **32-bit RISC-V Single-Cycle CPU**입니다. 명령�
 - Bubble Sort 파형에서 Stack Frame, 배열 Load/Store, Branch, swap 호출을 추적
 - 보고서 기준 Single-Cycle critical path에서 negative slack을 확인하고 Multi-Cycle/Pipeline 구조를 개선 방향으로 도출
 
-## Run and Reproducible Results
+## 프로그램 실행 검증
 
 Icarus Verilog가 설치된 환경에서 저장소 루트 기준으로 실행합니다. 실행에 필요한 memory image를 포함했으므로 RISC-V compiler는 기본 테스트에 필요하지 않습니다.
 
@@ -90,7 +90,7 @@ bash fpga-rv32i-single-cycle/scripts/run_sort_reproduction.sh
 | 제출 당시 memory image | `0, 1, 3, 5, 7, 9` | 결과 6개, 완료 marker, 프로그램 종료 위치 |
 | 정렬 조건을 수정한 프로그램 | `1, 3, 5, 7, 9` | 결과 5개, main 복귀 후 종료 위치 |
 
-테스트는 시간 제한과 PC·word 접근 주소 범위를 확인하고, 결과 불일치 시 `$fatal`로 실패합니다. GitHub Actions에도 같은 테스트를 추가했습니다. 실행 기록과 원본·수정 프로그램의 차이는 [재현 기록](./docs/reproduction.md)에 정리했습니다.
+테스트는 시간 제한과 PC·word 접근 주소 범위를 확인하고, 결과 불일치 시 `$fatal`로 실패합니다. GitHub Actions에서 같은 테스트를 실행합니다. 실행 기록과 원본·수정 프로그램의 차이는 [프로그램 실행 조건](./docs/reproduction.md)에 정리했습니다.
 
 수정 프로그램은 배열 길이를 5로 맞추고 `j < count - i - 1` 조건을 사용합니다. 원본 `bubble_sort.c`와 memory image는 제출 기록으로 보존했습니다. 수정 이미지 재생성에는 RISC-V GCC/binutils와 Python 3가 필요합니다.
 
@@ -98,12 +98,12 @@ bash fpga-rv32i-single-cycle/scripts/run_sort_reproduction.sh
 bash fpga-rv32i-single-cycle/scripts/build_sort_program.sh
 ```
 
-## Reproduction Notes and Limitations
+## 실행 조건
 
-- 원본 `rtl/instruction_mem.sv`는 LUI/AUIPC smoke-test ROM입니다. 새 재현 TB는 별도의 simulation ROM에 memory image를 로드하며, CPU와 Data RAM은 원본 RTL을 사용합니다.
-- 원본 Register File의 초기값은 x1=1, x2=2입니다. 재현 TB는 초기 Register File과 Data RAM을 명시적으로 초기화하며, 프로그램 첫 명령어가 Stack Pointer를 256으로 설정합니다.
+- 원본 `rtl/instruction_mem.sv`는 LUI/AUIPC smoke-test ROM입니다. 자동 비교 TB는 별도의 simulation ROM에 memory image를 로드하며, CPU와 Data RAM은 원본 RTL을 사용합니다.
+- 원본 Register File의 초기값은 x1=1, x2=2입니다. 자동 비교 TB는 초기 Register File과 Data RAM을 명시적으로 초기화하며, 프로그램 첫 명령어가 Stack Pointer를 256으로 설정합니다.
 - 원본 `bubble_sort.c`는 `int Num[6] = {3,5,9,1,7}`과 `j < size - i` 조건 때문에 여섯 번째 초기값 `0`까지 비교합니다. 새 TB에서도 원본 이미지의 `0,1,3,5,7,9` 결과를 확인했습니다.
-- 원본 `tb_rv32i.sv`는 파형 관찰용이며 자동 판정이 없습니다. 자동 결과 비교는 후속 추가한 `tb_sort_reproduction.sv`에서 수행합니다. 당시 Vivado 수동 분석 결과와 후속 Icarus 테스트를 구분합니다.
+- 원본 `tb_rv32i.sv`는 파형 관찰용이며 자동 판정이 없습니다. `tb_sort_reproduction.sv`는 Icarus Verilog에서 정렬 결과를 자동 비교합니다.
 - Bubble Sort 테스트는 프로그램 단위 결과 확인입니다. 37개 명령어의 모든 corner case, ISA 적합성 또는 timing closure를 검증한 결과는 아닙니다.
 - FPGA 보드 구현, XDC, Pipeline, Cache, Interrupt, CSR 및 privileged architecture는 범위에 포함하지 않았습니다.
 

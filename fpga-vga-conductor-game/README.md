@@ -21,7 +21,7 @@ FPGA는 영상 기반 좌표 추출과 게임 제어를 담당하고, PC 애플�
 
 ![군집화 적용 후 RED/GREEN 좌표를 표시한 MAESTRO UI](./docs/images/maestro-clustering-result.png)
 
-지휘봉·손 표식 이외의 빨강·초록 물체가 함께 검출되는 문제에 대응해 군집화를 적용했습니다. 산출한 좌표를 PC로 전달하여 검출 영상 위에 표시한 결과입니다. 이 이미지는 적용 후 동작 화면이며, 개선 전후의 정량 비교 결과는 아닙니다.
+지휘봉·손 표식 이외의 빨강·초록 물체가 함께 검출되는 문제에 대응해 군집화를 적용했습니다. 산출한 좌표를 PC로 전달하여 검출 영상 위에 표시한 결과입니다. 군집화 적용 후의 좌표 출력 화면입니다.
 
 ## System Flow
 
@@ -113,11 +113,11 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 - Frame Delay 문제 재현 및 좌표 갱신 타이밍 수정
 - QVGA 좌표와 VGA/PC 표시 좌표 간 Scale 차이 확인 및 연동 규격 정리
 
-### 좌표 RTL 추가 회귀 검증
+### 좌표 RTL 검증
 
-기본 파라미터(RED 최소 후보 8개, GREEN 최소 후보 16개)와 320×240 전체 Raster 입력에서 **13개 Frame 시나리오 / ERROR 0**을 확인했습니다. 좌표·40-bit Packet, Frame Done과 다음 Clock의 Valid, 미검출·Ready 대기·최신 프레임 갱신, 최소 후보 수 경계와 원거리 잡음을 검사합니다.
+기본 파라미터(RED 최소 후보 8개, GREEN 최소 후보 16개)와 320×240 전체 Raster 입력에서 **13개 프레임 조건 통과 / 오류 0건**을 확인했습니다. 좌표·40-bit Packet, Frame Done과 다음 Clock의 Valid, 미검출·Ready 대기·최신 프레임 갱신, 최소 후보 수 경계와 원거리 잡음을 검사합니다.
 
-2026.10.28 · Icarus Verilog 12.0 · [검증 조건과 실행 방법](verification/README.md) · [Testbench](verification/tb/tb_xy_detection.sv) · [실행 로그](verification/xy-regression.log)
+검증 조건 · 2026.10.28 · Icarus Verilog 12.0 · [검증 조건과 실행 방법](verification/README.md) · [Testbench](verification/tb/tb_xy_detection.sv) · [실행 로그](verification/xy-regression.log)
 
 ### Team-level Verification
 
