@@ -101,7 +101,7 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 | Clustering | 표식 외의 RED/GREEN 물체도 함께 검출되어 좌표 산출에 영향을 주는 문제에 대응 |
 | Coordinate synchronization pulse | 좌표 계산·출력·초기화 시점을 분리하고, 내부 동기 펄스로 다른 모듈과 좌표 전달 시점을 맞춤 |
 | Bounding Box center | 검출된 색상 영역의 Min/Max 범위를 이용해 단일 Pixel이 아닌 객체 중심을 지휘 입력으로 사용 |
-| Ready/Valid handshake | 후단 모듈이 좌표를 수신할 때까지 유효한 데이터를 유지하도록 전달 조건 구성 |
+| Ready/Valid handshake | 같은 프레임 내에서 유효 결과를 유지하고, 다음 Frame Done에서는 최신 좌표로 갱신 |
 | FPGA / PC role separation | 실시간 좌표·게임 판정은 FPGA, UI·MIDI·영상 연출은 PC가 담당해 각 플랫폼의 역할을 분리 |
 
 ## Verification & Troubleshooting
@@ -112,6 +112,12 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 - `song_decoder` 곡 선택·BPM 출력 Testbench
 - Frame Delay 문제 재현 및 좌표 갱신 타이밍 수정
 - QVGA 좌표와 VGA/PC 표시 좌표 간 Scale 차이 확인 및 연동 규격 정리
+
+### 좌표 RTL 추가 회귀 검증
+
+기본 파라미터(RED 최소 후보 8개, GREEN 최소 후보 16개)와 320×240 전체 Raster 입력에서 **13개 Frame 시나리오 / ERROR 0**을 확인했습니다. 좌표·40-bit Packet, Frame Done과 다음 Clock의 Valid, 미검출·Ready 대기·최신 프레임 갱신, 최소 후보 수 경계와 원거리 잡음을 검사합니다.
+
+2026.10.28 · Icarus Verilog 12.0 · [검증 조건과 실행 방법](verification/README.md) · [Testbench](verification/tb/tb_xy_detection.sv) · [실행 로그](verification/xy-regression.log)
 
 ### Team-level Verification
 
@@ -128,3 +134,4 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 - **Original Team Repository:** [realisshoon/fpga-vga-conductor-game](https://github.com/realisshoon/fpga-vga-conductor-game)
 - **Project Type:** 7-person Team Project
 - **Source:** RTL/Python 소스와 공동 작업 이력은 원본 팀 저장소에서 확인할 수 있습니다.
+

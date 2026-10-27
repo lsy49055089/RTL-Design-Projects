@@ -1,0 +1,18 @@
+FRAME 1: RED / READY=1 | XY=51,61,1023,1023
+FRAME 2: GREEN / READY=1 | XY=1023,1023,102,82
+FRAME 3: BOTH / READY=1 | XY=51,61,102,82
+FRAME 4: NONE / READY=1 | XY=1023,1023,1023,1023
+FRAME 5: RED / READY=0 | XY=51,61,1023,1023
+FRAME 6: pending RED replaced by fresh GREEN | XY=1023,1023,102,82
+FRAME 7: undetected frame clears pending Valid | XY=1023,1023,1023,1023
+FRAME 8: RED / delayed consumer | XY=51,61,1023,1023
+FRAME 9: GREEN 15 candidates: below minimum 16 | XY=1023,1023,1023,1023
+FRAME 10: GREEN 16 candidates: exact minimum | XY=1023,1023,108,80
+FRAME 11: RED 7 candidates: below minimum 8 | XY=1023,1023,1023,1023
+FRAME 12: RED 8 candidates: exact minimum | XY=54,60,1023,1023
+FRAME 13: RED cluster plus distant color noise | XY=51,61,1023,1023
+FRAME_DONE COUNT = 13
+HANDSHAKE COUNT = 7
+ERROR COUNT = 0
+XY REGRESSION PASS: 13 frame scenarios / 0 errors
+/workspace/scratch/129ae2c842cb/tmp/four-project-fix-20261028/verification/tb/tb_xy_detection.sv:148: $finish called at 20031156000 (1ps)
