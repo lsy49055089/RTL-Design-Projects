@@ -1,4 +1,9 @@
-# RTL / FPGA Design
+<a id="rtl--fpga-design"></a>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/readme/header-dark.svg">
+  <img src="./assets/readme/header-light.svg" width="100%" alt="RTL / FPGA Design">
+</picture>
 
 RTL의 제어·데이터 경로를 설계하고, FPGA 주변장치와 소프트웨어를 연결한 프로젝트입니다.
 
@@ -13,6 +18,9 @@ RTL의 제어·데이터 경로를 설계하고, FPGA 주변장치와 소프트�
 <a id="fpga-stopwatch--watchfpga-stopwatch-watch"></a>
 <a id="focus-areas"></a>
 <a id="portfolio-navigation"></a>
+
+
+[프로젝트 목록](#프로젝트) · [웹 포트폴리오 ↗](https://seungyeol-rtl-portfolio.azuretide33.chatgpt.site)
 
 ## 프로젝트
 
