@@ -1,16 +1,43 @@
 # RV32I Single-Cycle CPU
 
-SystemVerilog로 구현한 **32-bit RISC-V Single-Cycle CPU**입니다. 명령어 Fetch부터 Decode, Execute, Memory Access, Write Back까지의 데이터 흐름을 직접 설계하고 Vivado Simulation으로 검증했습니다.
+32-bit RV32I CPU의 Control Unit과 Datapath를 SystemVerilog로 설계하고, Bubble Sort 프로그램의 정렬 결과를 자동 비교했습니다.
 
-> 개인 프로젝트 · 2026.05.19 - 2026.05.27 · SystemVerilog · Xilinx Vivado
+## 개요
 
-## Architecture
+| 항목 | 내용 |
+|---|---|
+| 기간 | 2026.05.19–2026.05.27 |
+| 형태 | 개인 프로젝트 |
+| 기술 | SystemVerilog · RISC-V RV32I · Vivado · Icarus Verilog |
+
+
+## 담당 역할
+
+<a id="my-work"></a>
+
+개인 프로젝트로 다음 항목을 직접 설계하고 분석했습니다.
+
+- CPU top, Control Unit 및 전체 Datapath 통합
+- ALU와 signed/unsigned Branch 비교 로직
+- Register File, Immediate Extend, Program Counter 및 Write-Back MUX
+- Byte/Halfword/Word Data Memory 접근과 sign/zero extension
+- R/I/S/B/U/J-Type instruction decode 및 control signal 생성
+- Testbench 작성, waveform 분석 및 Bubble Sort 프로그램 흐름 검증
+
+
+## 설계·구현
+
+<a id="architecture"></a>
+
+### 시스템 구조
 
 ![RV32I single-cycle architecture](./assets/architecture.png)
 
 최상위 SoC는 CPU Core, Instruction Memory, Data Memory로 구성됩니다. CPU 내부는 Control Unit과 Datapath로 분리했으며 Datapath에 Program Counter, Register File, ALU, Immediate Extend, Write-Back MUX를 배치했습니다.
 
-## Implemented Features
+<a id="implemented-features"></a>
+
+### 주요 기능
 
 - 32-bit instruction, register, ALU 및 memory datapath
 - `opcode`, `funct3`, `funct7` 기반 combinational instruction decoder
@@ -21,7 +48,9 @@ SystemVerilog로 구현한 **32-bit RISC-V Single-Cycle CPU**입니다. 명령�
 - Bubble Sort C 코드와 104-word instruction memory image
 - Vivado waveform 기반 instruction 및 프로그램 흐름 분석
 
-## Instruction Support
+<a id="instruction-support"></a>
+
+### 명령어 지원
 
 제출 RTL을 기준으로 RV32I 기본 명령어 40개 중 아래 **37개**를 구현했습니다.
 
@@ -37,38 +66,12 @@ SystemVerilog로 구현한 **32-bit RISC-V Single-Cycle CPU**입니다. 명령�
 
 `FENCE`, `ECALL`, `EBREAK`은 포함하지 않습니다.
 
-## My Work
 
-개인 프로젝트로 다음 항목을 직접 설계하고 분석했습니다.
+## 검증 결과
 
-- CPU top, Control Unit 및 전체 Datapath 통합
-- ALU와 signed/unsigned Branch 비교 로직
-- Register File, Immediate Extend, Program Counter 및 Write-Back MUX
-- Byte/Halfword/Word Data Memory 접근과 sign/zero extension
-- R/I/S/B/U/J-Type instruction decode 및 control signal 생성
-- Testbench 작성, waveform 분석 및 Bubble Sort 프로그램 흐름 검증
+<a id="verification-summary"></a>
 
-## Source Structure
-
-| Path | Description |
-|---|---|
-| `rtl/top_rv32i_soc.sv` | CPU, Instruction ROM, Data RAM 통합 |
-| `rtl/rv32i_cpu.sv` | Control Unit과 Datapath 연결 |
-| `rtl/control_unit.sv` | Instruction decode 및 control signal 생성 |
-| `rtl/rv32i_datapath.sv` | PC, Register File, ALU, Immediate, MUX |
-| `rtl/instruction_mem.sv` | 기본 instruction smoke-test ROM |
-| `rtl/data_mem.sv` | Load/Store 및 sign/zero extension |
-| `rtl/define.vh` | Opcode, ALU, memory mode 정의 |
-| `tb/tb_rv32i.sv` | Clock/reset 기반 top-level simulation |
-| `program/bubble_sort.c` | 제출된 Bubble Sort C source |
-| `program/instruction_mem_sort.mem` | 제출된 104-word RISC-V memory image |
-| `program/reproduction/` | 정렬 조건을 수정한 C, startup, linker script, 생성된 memory image |
-| `tb/tb_sort_reproduction.sv` | 원본·수정 프로그램의 정렬 결과 자동 비교 |
-| `scripts/run_sort_reproduction.sh` | Icarus Verilog 기반 두 프로그램 실행 |
-
-원본의 `type.vh`는 `define.vh`와 동일한 중복 파일이어서 공개 구조에서는 제외했습니다.
-
-## Verification Summary
+### 검증 항목
 
 - R/I/S/Load/B/U/J/JALR Type별 decode, ALU, Write Back 흐름 확인
 - `LB/LH` sign extension 및 `LBU/LHU` zero extension 확인
@@ -77,7 +80,7 @@ SystemVerilog로 구현한 **32-bit RISC-V Single-Cycle CPU**입니다. 명령�
 - Bubble Sort 파형에서 Stack Frame, 배열 Load/Store, Branch, swap 호출을 추적
 - 보고서 기준 Single-Cycle critical path에서 negative slack을 확인하고 Multi-Cycle/Pipeline 구조를 개선 방향으로 도출
 
-## 프로그램 실행 검증
+### 프로그램 실행 검증
 
 Icarus Verilog가 설치된 환경에서 저장소 루트 기준으로 실행합니다. 실행에 필요한 memory image를 포함했으므로 RISC-V compiler는 기본 테스트에 필요하지 않습니다.
 
@@ -98,7 +101,10 @@ bash fpga-rv32i-single-cycle/scripts/run_sort_reproduction.sh
 bash fpga-rv32i-single-cycle/scripts/build_sort_program.sh
 ```
 
-## 실행 조건
+
+## 실행 방법
+
+### 실행 조건
 
 - 원본 `rtl/instruction_mem.sv`는 LUI/AUIPC smoke-test ROM입니다. 자동 비교 TB는 별도의 simulation ROM에 memory image를 로드하며, CPU와 Data RAM은 원본 RTL을 사용합니다.
 - 원본 Register File의 초기값은 x1=1, x2=2입니다. 자동 비교 TB는 초기 Register File과 Data RAM을 명시적으로 초기화하며, 프로그램 첫 명령어가 Stack Pointer를 256으로 설정합니다.
@@ -107,7 +113,31 @@ bash fpga-rv32i-single-cycle/scripts/build_sort_program.sh
 - Bubble Sort 테스트는 프로그램 단위 결과 확인입니다. 37개 명령어의 모든 corner case, ISA 적합성 또는 timing closure를 검증한 결과는 아닙니다.
 - FPGA 보드 구현, XDC, Pipeline, Cache, Interrupt, CSR 및 privileged architecture는 범위에 포함하지 않았습니다.
 
-## Project Layout
+<a id="source-structure"></a>
+
+### 소스 구성
+
+| Path | Description |
+|---|---|
+| `rtl/top_rv32i_soc.sv` | CPU, Instruction ROM, Data RAM 통합 |
+| `rtl/rv32i_cpu.sv` | Control Unit과 Datapath 연결 |
+| `rtl/control_unit.sv` | Instruction decode 및 control signal 생성 |
+| `rtl/rv32i_datapath.sv` | PC, Register File, ALU, Immediate, MUX |
+| `rtl/instruction_mem.sv` | 기본 instruction smoke-test ROM |
+| `rtl/data_mem.sv` | Load/Store 및 sign/zero extension |
+| `rtl/define.vh` | Opcode, ALU, memory mode 정의 |
+| `tb/tb_rv32i.sv` | Clock/reset 기반 top-level simulation |
+| `program/bubble_sort.c` | 제출된 Bubble Sort C source |
+| `program/instruction_mem_sort.mem` | 제출된 104-word RISC-V memory image |
+| `program/reproduction/` | 정렬 조건을 수정한 C, startup, linker script, 생성된 memory image |
+| `tb/tb_sort_reproduction.sv` | 원본·수정 프로그램의 정렬 결과 자동 비교 |
+| `scripts/run_sort_reproduction.sh` | Icarus Verilog 기반 두 프로그램 실행 |
+
+원본의 `type.vh`는 `define.vh`와 동일한 중복 파일이어서 공개 구조에서는 제외했습니다.
+
+<a id="project-layout"></a>
+
+### 디렉터리
 
 ```text
 fpga-rv32i-single-cycle/
@@ -133,3 +163,10 @@ fpga-rv32i-single-cycle/
 ├── .gitignore
 └── README.md
 ```
+
+
+---
+
+[웹 포트폴리오](https://seungyeol-rtl-portfolio.azuretide33.chatgpt.site) · [GitHub 프로필](https://github.com/lsy49055089)
+
+[논문](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [AI / CV](https://github.com/lsy49055089/AI-Projects)

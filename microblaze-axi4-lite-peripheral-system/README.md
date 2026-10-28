@@ -1,12 +1,29 @@
 # MicroBlaze AXI4-Lite Peripheral System
 
-GPIO·Timer·UART·SPI·I2C LCD의 5종 AXI4-Lite Custom IP를 구현하고, MicroBlaze 기반 GPIO·UART·SPI·I2C LCD 제어와 두 대의 Basys3 간 UART/SPI 통신을 통합한 FPGA HW/SW 프로젝트입니다. Master 보드에는 Processor·Custom IP·Vitis C를, Slave 보드에는 순수 SystemVerilog UART RX·SPI Slave RTL을 적용했습니다.
+5종 AXI4-Lite Custom IP와 C MMIO 드라이버를 설계하고, MicroBlaze 기반 두 보드의 UART·SPI 통신과 I2C LCD를 통합했습니다.
 
-> 개인 프로젝트 · 2026.06.22 - 2026.06.30 · Verilog/SystemVerilog · UVM · Vitis C · Vivado 2020.2
+## 개요
 
-> **구현과 시연 범위:** Timer IP는 RTL/Register Map 구현에 포함됩니다. 최종 Vitis 데모의 Count-Up은 소프트웨어 변수로 처리했으며, Timer IP를 통한 카운트 제어는 시연 범위에 포함하지 않습니다.
+| 항목 | 내용 |
+|---|---|
+| 기간 | 2026.06.22–2026.06.30 |
+| 형태 | 개인 프로젝트 |
+| 기술 | Verilog/SystemVerilog · AXI4-Lite · UVM · Vitis C · Vivado 2020.2 · Basys3 |
 
-## Architecture
+Timer IP는 RTL·Register Map 구현 범위이며, 최종 데모의 Count-Up은 소프트웨어 변수로 처리했습니다.
+
+## 담당 역할
+
+- GPIO·Timer·UART·SPI·I2C LCD의 Custom IP RTL과 AXI4-Lite Register Map 설계
+- Vitis C MMIO 드라이버와 통합 제어 애플리케이션 구현
+- Slave UART RX·SPI RTL, UVM 검증 환경과 두 보드 통합 시험
+
+
+## 설계·구현
+
+<a id="architecture"></a>
+
+### 시스템 구조
 
 ![MicroBlaze AXI4-Lite peripheral architecture](./assets/system-architecture.jpg)
 
@@ -20,7 +37,9 @@ MicroBlaze는 AXI Interconnect를 통해 각 Peripheral의 Register Map에 접�
 | Board-to-Board SPI | MOSI로 Switch 값을 전송하고 MISO로 `0xA5` 응답 수신 |
 | I2C LCD | 선택 모드와 `DATA/CNT 0xXX` 형식의 값을 표시 |
 
-## Custom IP
+<a id="custom-ip"></a>
+
+### Custom IP 5종
 
 | IP | AXI4-Lite Control | Main Function |
 |---|---|---|
@@ -30,7 +49,9 @@ MicroBlaze는 AXI Interconnect를 통해 각 Peripheral의 Register Map에 접�
 | SPI | TX data, start, RX/status | Mode 0 SPI Master 통신 |
 | I2C LCD | Mode/value, start, status | PCF8574 기반 Character LCD 제어 |
 
-## Implemented Features
+<a id="implemented-features"></a>
+
+### 주요 기능
 
 - Vivado Block Design 기반 MicroBlaze, BRAM, AXI Interconnect 및 Peripheral 통합
 - `AW/W/B`, `AR/R` 채널 Handshake와 Byte Strobe를 처리하는 AXI4-Lite Slave Register 설계
@@ -41,7 +62,12 @@ MicroBlaze는 AXI Interconnect를 통해 각 Peripheral의 Register Map에 접�
 - Button edge detection, 50 ms debounce, timeout 및 통신 상태 표시
 - Master/Slave 두 보드와 I2C LCD를 연결한 실제 FPGA 통합 시험
 
-## Verification Summary
+
+## 검증 결과
+
+<a id="verification-summary"></a>
+
+### 검증 요약
 
 최종 프로젝트 보고서에 기록된 검증 결과입니다.
 
@@ -55,7 +81,9 @@ MicroBlaze는 AXI Interconnect를 통해 각 Peripheral의 Register Map에 접�
 
 `verification/`에는 SPI AXI-Lite UVM 환경과 I2C Master/Slave UVM 환경을 분리했습니다. SPI 환경은 AXI-Lite Driver·Monitor·Scoreboard·Functional Coverage와 SPI Slave model을 포함합니다. 실행 방법과 지원 Test 이름은 각 디렉터리의 README에 정리했습니다.
 
-## Debugging Highlights
+<a id="debugging-highlights"></a>
+
+### 문제 해결
 
 - AXI UARTLite와 Custom UART의 B18 핀 충돌을 분리하고 Custom UART를 JB1/JB2로 이동
 - IP Packaging에서 누락된 I2C LCD 하위 RTL을 Synthesis/Simulation File Group에 포함
@@ -63,7 +91,21 @@ MicroBlaze는 AXI Interconnect를 통해 각 Peripheral의 Register Map에 접�
 - Button level 직접 사용으로 발생한 반복 동작을 rising-edge 검출과 debounce로 개선
 - PCF8574 주소를 7-bit `0x27`, write address `0x4E`로 통일
 
-## Source Structure
+
+## 실행 방법
+
+### 실행 조건
+
+- Vivado/Vitis에서 자동 생성되는 output products, bitstream, BSP, `xparameters.h`, linker script는 저장소에서 제외했습니다. `design_1.bd`로 Hardware Platform을 다시 생성해야 합니다.
+- Custom IP를 Vivado IP Catalog에 package한 뒤 Block Design의 IP version과 address map을 확인해야 합니다.
+- UVM Makefile은 Synopsys VCS와 UVM 1.2 환경을 기준으로 작성했습니다. 현재 저장소에는 원본 simulator log와 coverage database가 포함되지 않습니다.
+- 보고서의 PASS/Coverage 수치는 제출 당시 실행 결과이며, 이 저장소만으로 CI에서 자동 재실행한 결과가 아닙니다.
+- 최종 Vitis 데모의 BTNU Count-Up은 Timer IP의 CNT register가 아니라 software 변수 증가 방식입니다. Timer IP 실제 소프트웨어 연동은 후속 개선 항목입니다.
+- 최종 보드 시연의 Custom UART는 Master 송신과 Slave 수신 경로만 사용합니다.
+
+<a id="source-structure"></a>
+
+### 소스 구성
 
 | Path | Description |
 |---|---|
@@ -78,16 +120,9 @@ MicroBlaze는 AXI Interconnect를 통해 각 Peripheral의 Register Map에 접�
 | `verification/spi_uvm/` | AXI-Lite 기반 SPI UVM 환경 |
 | `verification/i2c_uvm/` | I2C Master/Slave UVM 환경 |
 
-## 실행 조건
+<a id="project-layout"></a>
 
-- Vivado/Vitis에서 자동 생성되는 output products, bitstream, BSP, `xparameters.h`, linker script는 저장소에서 제외했습니다. `design_1.bd`로 Hardware Platform을 다시 생성해야 합니다.
-- Custom IP를 Vivado IP Catalog에 package한 뒤 Block Design의 IP version과 address map을 확인해야 합니다.
-- UVM Makefile은 Synopsys VCS와 UVM 1.2 환경을 기준으로 작성했습니다. 현재 저장소에는 원본 simulator log와 coverage database가 포함되지 않습니다.
-- 보고서의 PASS/Coverage 수치는 제출 당시 실행 결과이며, 이 저장소만으로 CI에서 자동 재실행한 결과가 아닙니다.
-- 최종 Vitis 데모의 BTNU Count-Up은 Timer IP의 CNT register가 아니라 software 변수 증가 방식입니다. Timer IP 실제 소프트웨어 연동은 후속 개선 항목입니다.
-- 최종 보드 시연의 Custom UART는 Master 송신과 Slave 수신 경로만 사용합니다.
-
-## Project Layout
+### 디렉터리
 
 ```text
 microblaze-axi4-lite-peripheral-system/
@@ -108,3 +143,10 @@ microblaze-axi4-lite-peripheral-system/
 ├── .gitignore
 └── README.md
 ```
+
+
+---
+
+[웹 포트폴리오](https://seungyeol-rtl-portfolio.azuretide33.chatgpt.site) · [GitHub 프로필](https://github.com/lsy49055089)
+
+[논문](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [AI / CV](https://github.com/lsy49055089/AI-Projects)

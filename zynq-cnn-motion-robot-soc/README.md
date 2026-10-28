@@ -1,6 +1,8 @@
 # CNN 모션인식 SoC 플랫폼
 
-두 카메라의 CNN 관절 좌표를 스테레오 3D 복원·관절각 변환과 연결하고, Zynq의 PS–PL 구조로 5축 로봇팔을 제어한 7인 팀 프로젝트입니다. **PWM IP·C 출력 제어·동작 기록/재생·통합 디버깅**을 담당했습니다.
+CNN·스테레오 3D 입력으로 5축 로봇팔을 제어하는 시스템에서 PWM IP, C 출력 제어, 동작 기록·재생과 통합 디버깅을 담당했습니다.
+
+## 개요
 
 | 항목 | 내용 |
 |---|---|
@@ -11,13 +13,9 @@
 | 기술 | Zybo Z7-20, Zynq-7000, Verilog, AXI4-Lite, C, Vivado/Vitis, DDR, SD/FatFS, UART, Unity/C# |
 | 전체 소스 | [팀 공동 저장소](https://github.com/realisshoon/zynq-cnn-motion-robot-soc) · [로봇팔 펌웨어](https://github.com/realisshoon/zynq-cnn-motion-robot-soc/tree/main/robot_arm) · [Unity](https://github.com/realisshoon/zynq-cnn-motion-robot-soc/tree/main/Unity) |
 
-## 최종 통합 시연
+## 담당 역할
 
-![사람의 팔 동작과 실제 로봇팔·Unity 화면을 함께 보여주는 최종 발표 시연](https://raw.githubusercontent.com/realisshoon/zynq-cnn-motion-robot-soc/fc647991090b3955780308f7e371f94595f9bf7e/docs/media/demo-final-slide10.gif)
-
-*2026.10.15 최종 발표 당시 시연. 사람의 동작 입력, 실물 로봇팔과 가상 로봇 화면을 함께 확인할 수 있습니다.*
-
-## 담당 범위
+<a id="담당-범위"></a>
 
 | 구분 | 수행 내용 |
 |---|---|
@@ -29,15 +27,20 @@
 
 CNN 가속기와 UVM 검증은 CNN팀이, 스테레오 3D 복원·관절각 산출은 로봇팔팀의 다른 팀원이 담당했습니다. 전체 시스템 통합과 최종 시연은 팀 공동 성과입니다.
 
-## 시스템 구조
+
+## 설계·구현
+
+### 시스템 구조
 
 ![카메라·CNN·로봇팔·PC 가상환경을 연결한 팀 시스템 구성도](https://raw.githubusercontent.com/realisshoon/zynq-cnn-motion-robot-soc/fc647991090b3955780308f7e371f94595f9bf7e/docs/media/system-architecture-slide12.png)
 
 카메라 영상과 CNN 연산 데이터는 DMA·DDR 경로로 전달됩니다. PS의 C 코드는 관측 데이터·목표 관절각·출력 모드와 파일을 관리하고, PL의 PWM IP는 AXI4-Lite 레지스터 설정을 받아 서보 파형을 생성합니다.
 
-본인 구현의 중심은 **보정된 관절 명령 → 20 ms 출력 제어 → PWM 변환·HAL → AXI4-Lite PWM IP**와, 이 출력 경로에 연결한 **기록·재생**입니다.
+담당 출력 경로는 **보정된 관절 명령 → 20 ms 출력 제어 → PWM 변환·HAL → AXI4-Lite PWM IP**와, 이 출력 경로에 연결한 **기록·재생**입니다.
 
-## 1. PWM IP와 PS–PL 출력 제어
+<a id="1-pwm-ip와-pspl-출력-제어"></a>
+
+### PWM IP와 PS–PL 출력 제어
 
 초기에는 고정 명령을 PS에서 전달해 AXI 레지스터 쓰기와 PWM 출력을 먼저 확인했습니다. 이후 설정·모드·기록 처리를 C로 옮기고, 반복 파형 생성은 PL에 남겼습니다.
 
@@ -68,7 +71,9 @@ CNN 가속기와 UVM 검증은 CNN팀이, 스테레오 3D 복원·관절각 산�
 
 </details>
 
-## 2. C 기반 동작 기록·재생
+<a id="2-c-기반-동작-기록재생"></a>
+
+### C 기반 동작 기록·재생
 
 CNN 관측 갱신과 **20 ms 제어 주기**를 분리했습니다. 새 관측은 목표를 갱신하고, 제어 틱마다 속도·가속도를 제한한 명령을 출력합니다. 기록도 새 CNN 입력 시점이 아니라 **HAL 출력 적용에 성공한 제어 틱**에 수행합니다.
 
@@ -95,7 +100,9 @@ CNN 관측 갱신과 **20 ms 제어 주기**를 분리했습니다. 새 관측�
 
 </details>
 
-## 3. CNN 통합 후 디버깅
+<a id="3-cnn-통합-후-디버깅"></a>
+
+### CNN 통합 후 디버깅
 
 | 문제 | 담당·수정 | 동작 변화 |
 |---|---|---|
@@ -110,7 +117,12 @@ CNN 관측 갱신과 **20 ms 제어 주기**를 분리했습니다. 새 관측�
 
 [그리퍼 제어](https://github.com/realisshoon/zynq-cnn-motion-robot-soc/blob/fc647991090b3955780308f7e371f94595f9bf7e/robot_arm/src/app/robot/control/gripper_control.c) · [출력 적용](https://github.com/realisshoon/zynq-cnn-motion-robot-soc/blob/fc647991090b3955780308f7e371f94595f9bf7e/robot_arm/src/app/robot/control/servo_output.c) · [관측·제어 주기 연결](https://github.com/realisshoon/zynq-cnn-motion-robot-soc/blob/fc647991090b3955780308f7e371f94595f9bf7e/robot_arm/src/app/robot/control/robot_motion.c)
 
-## 4. 검증과 결과
+
+## 검증 결과
+
+<a id="4-검증과-결과"></a>
+
+### 검증 요약
 
 | 검증 기준 | 확인한 내용 | 결과 |
 |---|---|---|
@@ -132,7 +144,16 @@ C 회귀는 PC의 레지스터 모의·메모리 FatFS 기준입니다. PWM TB�
 
 </details>
 
-## 소스와 자료
+### 최종 통합 시연
+
+![사람의 팔 동작과 실제 로봇팔·Unity 화면을 함께 보여주는 최종 발표 시연](https://raw.githubusercontent.com/realisshoon/zynq-cnn-motion-robot-soc/fc647991090b3955780308f7e371f94595f9bf7e/docs/media/demo-final-slide10.gif)
+
+*2026.10.15 최종 발표 당시 시연. 사람의 동작 입력, 실물 로봇팔과 가상 로봇 화면을 함께 확인할 수 있습니다.*
+
+
+## 실행 방법
+
+### 소스와 자료
 
 | 자료 | 확인할 내용 |
 |---|---|
@@ -144,3 +165,10 @@ C 회귀는 PC의 레지스터 모의·메모리 FatFS 기준입니다. PWM TB�
 소스 링크 기준: 팀 저장소 commit [fc64799](https://github.com/realisshoon/zynq-cnn-motion-robot-soc/commit/fc647991090b3955780308f7e371f94595f9bf7e).
 
 [RTL / FPGA 프로젝트 목록](../README.md) · [GitHub 포트폴리오](https://github.com/lsy49055089)
+
+
+---
+
+[웹 포트폴리오](https://seungyeol-rtl-portfolio.azuretide33.chatgpt.site) · [GitHub 프로필](https://github.com/lsy49055089)
+
+[논문](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [AI / CV](https://github.com/lsy49055089/AI-Projects)

@@ -1,84 +1,37 @@
-# RTL / FPGA Design Projects
+# RTL / FPGA Design
 
-Verilog·SystemVerilog 기반 RTL 설계와 FPGA 시스템 구현 결과를 정리한 포트폴리오 저장소입니다.
-
-**Portfolio focus:** RTL architecture · FPGA system integration · functional verification
-
-[![RTL Design CI](https://github.com/lsy49055089/RTL-Design-Projects/actions/workflows/rtl-ci.yml/badge.svg)](https://github.com/lsy49055089/RTL-Design-Projects/actions/workflows/rtl-ci.yml)
-
-> **Related Conference Paper:** [Parallel Decision Tree Hardware](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) — 현재 노드와 좌·우 자식 후보를 동시에 평가하는 3-UN 병렬 Datapath와 탐색 제어 FSM을 직접 설계한 연구입니다.
-
-## Projects
-
-### [CNN 모션인식 SoC 플랫폼](./zynq-cnn-motion-robot-soc)
-
-두 카메라의 CNN 관절 인식·스테레오 3D 복원을 Zynq 기반 5축 로봇팔 제어로 연결한 7인 팀 프로젝트입니다. 최종 프로젝트 경진대회에서 **최우수상**을 수상했습니다(2026.10.15 · 5개 팀 중 2위).
-
-- **Stack:** Zynq-7000, Verilog, AXI4-Lite, C, Vivado/Vitis, DDR, SD/FatFS, UART, Unity/C#
-- **Architecture:** Camera/CNN → Stereo 3D → Joint Command → PS C Control → AXI4-Lite PWM IP → Robot Arm / Unity
-- **My Role:** PWM Core·Custom IP·C 출력 제어, 20 ms Record/Replay·DDR/SD 저장, 그리퍼·좌표 도약 처리, Unity 가상환경
-- **Verification:** PC 모의 기반 C 회귀 LEFT 16 / RIGHT 16, PC 모니터 131개 테스트, 최종 실물 통합 시연
-- **Team Source:** [realisshoon/zynq-cnn-motion-robot-soc](https://github.com/realisshoon/zynq-cnn-motion-robot-soc)
-
-### [FPGA VGA Conductor Game](./fpga-vga-conductor-game)
-
-OV7670 영상에서 RED/GREEN 객체 좌표를 추출하고 FPGA 게임 로직과 Python MAESTRO UI를 UART로 연동한 7인 팀 프로젝트입니다.
-
-- **Stack:** SystemVerilog, FPGA, OV7670, UART, Python, PySide6, MIDI
-- **Architecture:** RGB Filter → XY Detection → Game Logic → UART Wrapper → PC Application
-- **Key Features:** 지휘봉/손 좌표 추출, 4박 패턴, BPM·음량·점수, VGA Capture, MAESTRO UI
-- **My Role:** `xy_detection`·`song_decoder` RTL/TB, 속도 기능 명세, FPGA-PC Interface와 MAESTRO UI 연동, 군집화와 좌표 전달용 동기 신호 적용, Frame Delay/QVGA-VGA 좌표 이슈 해결
-- **Team Source:** [realisshoon/fpga-vga-conductor-game](https://github.com/realisshoon/fpga-vga-conductor-game)
-
-### [MicroBlaze AXI4-Lite Peripheral System](./microblaze-axi4-lite-peripheral-system)
-
-5종 AXI4-Lite Custom IP를 구현하고, MicroBlaze 기반 GPIO·UART·SPI·I2C LCD 제어와 두 대의 Basys3 간 UART/SPI 통신을 통합한 개인 HW/SW 프로젝트입니다. Timer IP는 구현 범위에 포함되며, 최종 Vitis 데모의 카운트 기능은 소프트웨어 변수로 처리했습니다.
-
-- **Stack:** Verilog, SystemVerilog, UVM, Vitis C, Xilinx Vivado, Basys3 FPGA
-- **Architecture:** MicroBlaze, AXI Interconnect, GPIO/Timer/UART/SPI/I2C LCD Custom IP, Slave RTL
-- **Key Features:** MMIO Driver, 2-Board UART/SPI, I2C LCD, SPI 32/32 PASS, I2C 30/30 PASS
-- **My Role:** Custom IP와 Register Map 설계, Vitis C 제어, Slave RTL, UVM 검증, 보드 통합
-
-### [RV32I Single-Cycle CPU](./fpga-rv32i-single-cycle)
-
-SystemVerilog로 32-bit RISC-V Single-Cycle CPU의 Control Unit과 전체 Datapath를 설계한 개인 프로젝트입니다.
-
-- **Stack:** SystemVerilog, RISC-V RV32I, Xilinx Vivado
-- **Architecture:** Control Unit, PC, Register File, ALU, Immediate, Instruction/Data Memory
-- **Key Features:** 37개 RV32I 명령어 구현, Load/Store, Branch/JAL/JALR, 원본·수정 Bubble Sort 이미지 자동 결과 확인
-- **My Role:** CPU RTL 전체 설계, instruction decode, memory access, testbench 및 waveform 분석
-
-### [FPGA UART/FIFO Sensor Control System](./fpga-uart-fifo-sensor-system)
-
-Stopwatch·Watch·DHT11·HC-SR04를 UART/FIFO와 하나의 Basys3 시스템으로 통합한 프로젝트입니다.
-
-- **Stack:** Verilog HDL, Xilinx Vivado, Basys3 FPGA, DHT11, HC-SR04
-- **Architecture:** FSM/Datapath, UART RX/TX, FIFO, ASCII Decoder/Sender, 공용 FND 출력
-- **Key Features:** PC ASCII 제어, 온습도·거리 측정, 시간 기능, timeout·checksum 검증
-- **My Role:** DHT11 RTL·검증, 최종 통합 테스트벤치, FND 및 센서 Control 통합 참여
-
-### [FPGA Stopwatch & Watch](./fpga-stopwatch-watch)
-
-Digilent Basys3 보드에서 동작하는 디지털 시계와 스톱워치 통합 시스템입니다.
-
-- **Stack:** Verilog HDL, Xilinx Vivado, Basys3 FPGA
-- **Architecture:** Control Unit / Datapath 분리, FSM 기반 모드 제어
-- **Key Features:** 100 Hz tick, 시간 계수, 버튼 디바운싱, Moment 캡처, 4자리 7-Segment 표시
-- **My Role:** Stopwatch FSM·Datapath 설계, Moment 기능 구현, 테스트벤치 작성 및 시뮬레이션 검증
-
-## Focus Areas
-
-- RISC-V ISA 기반 CPU Control Unit 및 Datapath 설계
-- FSM 및 Datapath 기반 RTL 설계
-- FPGA 주변장치와 UART/FIFO 시스템 통합
-- MicroBlaze와 AXI4-Lite Custom IP 기반 HW/SW 통합
-- Zynq PS–PL 제어, 5축 PWM 출력과 DDR/SD 기반 동작 기록·재생
-- 실시간 영상 좌표 처리와 FPGA-PC Interface 통합
-- SystemVerilog/Verilog 테스트벤치와 파형 기반 기능 검증
-- 센서 timing, timeout 및 checksum 처리
+RTL의 제어·데이터 경로를 설계하고, FPGA 주변장치와 소프트웨어를 연결한 프로젝트입니다.
 
 
-## Continuous Integration
+<a id="rtl--fpga-design-projects"></a>
+<a id="projects"></a>
+<a id="cnn-모션인식-soc-플랫폼zynq-cnn-motion-robot-soc"></a>
+<a id="fpga-vga-conductor-gamefpga-vga-conductor-game"></a>
+<a id="microblaze-axi4-lite-peripheral-systemmicroblaze-axi4-lite-peripheral-system"></a>
+<a id="rv32i-single-cycle-cpufpga-rv32i-single-cycle"></a>
+<a id="fpga-uartfifo-sensor-control-systemfpga-uart-fifo-sensor-system"></a>
+<a id="fpga-stopwatch--watchfpga-stopwatch-watch"></a>
+<a id="focus-areas"></a>
+<a id="portfolio-navigation"></a>
+
+## 프로젝트
+
+| 프로젝트 | 담당 역할 | 주요 구현·결과 |
+|---|---|---|
+| [CNN 모션인식 SoC 플랫폼](./zynq-cnn-motion-robot-soc) | PWM IP·C 출력 제어·기록/재생·그리퍼 안정화·Unity | 5축·20 ms 제어, 실물·가상환경 시연 · 최우수상 |
+| [MicroBlaze AXI4-Lite Peripheral System](./microblaze-axi4-lite-peripheral-system) | Custom IP·Register Map·C MMIO·Slave RTL·UVM·보드 통합 | IP 5종, SPI 32/32·I2C 30/30 PASS, 두 보드 통신 |
+| [FPGA VGA Conductor Game](./fpga-vga-conductor-game) | 좌표·곡 디코더 RTL/TB·프레임 동기화·PC UI 연동 | RED/GREEN 좌표 추출, Frame Delay 수정, 좌표 RTL 13프레임·오류 0건 |
+| [RV32I Single-Cycle CPU](./fpga-rv32i-single-cycle) | Control Unit·Datapath·Memory·테스트벤치 | 37개 명령어 구현, Bubble Sort 프로그램 결과 자동 비교 |
+| [FPGA UART/FIFO Sensor Control System](./fpga-uart-fifo-sensor-system) | DHT11 RTL·Checksum·통합 TB·FND 연동 참여 | 40-bit 센서 수신, 시계·센서·UART 통합 동작 확인 |
+| [FPGA Stopwatch & Watch](./fpga-stopwatch-watch) | Stopwatch FSM·Datapath·Moment·테스트벤치 | 100 Hz 시간 계수, 순간값 저장·표시, Basys3 동작 확인 |
+
+[병렬 결정트리 연구](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware)는 별도 저장소에서 확인할 수 있습니다.
+
+## 검증·실행
+
+<a id="continuous-integration"></a>
+
+### 자동 검사와 실행
 
 GitHub Actions에서 Icarus Verilog로 RV32I와 Stopwatch RTL의 SystemVerilog/Verilog elaboration을 자동 검사합니다.
 
@@ -89,10 +42,13 @@ bash fpga-rv32i-single-cycle/scripts/run_sort_reproduction.sh
 
 RV32I는 추가로 원본 Bubble Sort 이미지와 정렬 조건을 수정한 프로그램을 실행해 결과 배열을 자동 비교합니다. 이 테스트는 프로그램 단위 결과 확인이며, 37개 명령어의 모든 동작 조건이나 타이밍 검증을 의미하지 않습니다.
 
-> 공개 소스가 완전한 두 프로젝트만 CI 대상으로 삼았습니다. Vivado Block Design과 원본 UART/FIFO 하위 RTL이 필요한 프로젝트는 문서에 별도 범위를 표시합니다.
+> CI는 RV32I·Stopwatch의 elaboration과 RV32I 정렬 프로그램 결과를 검사합니다. 다른 프로젝트의 Vivado Block Design·UART/FIFO 의존 소스는 각 README의 실행 조건을 따릅니다.
+
+
+[CI 실행 기록](https://github.com/lsy49055089/RTL-Design-Projects/actions/workflows/rtl-ci.yml)
 
 ---
 
-## Portfolio Navigation
+[웹 포트폴리오](https://seungyeol-rtl-portfolio.azuretide33.chatgpt.site) · [GitHub 프로필](https://github.com/lsy49055089)
 
-[Conference Paper](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [Edge AI / CV](https://github.com/lsy49055089/AI-Projects)
+[논문](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [AI / CV](https://github.com/lsy49055089/AI-Projects)

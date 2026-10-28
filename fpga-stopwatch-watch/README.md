@@ -1,10 +1,15 @@
 # FPGA Stopwatch & Watch
 
-Digilent Basys3 FPGA에서 동작하는 **디지털 시계(Watch)와 스톱워치(Stopwatch) 통합 시스템**입니다. Verilog RTL로 Control Unit과 Datapath를 분리하고, 버튼 입력부터 시간 카운트 및 4자리 7-Segment 표시까지 하나의 시스템으로 구현했습니다.
+Basys3에서 시계와 스톱워치를 통합하고, Stopwatch FSM·시간 카운터·Moment Capture를 Verilog RTL로 구현했습니다.
 
-> 2인 팀 프로젝트 · 2026.04.16 - 2026.04.20
+## 개요
 
-![FPGA Stopwatch & Watch block diagram](./assets/architecture.png)
+| 항목 | 내용 |
+|---|---|
+| 기간 | 2026.04.16–2026.04.20 |
+| 형태 | 2인 팀 프로젝트 |
+| 기술 | Verilog · Vivado · Basys3 |
+
 
 ## 담당 역할
 
@@ -14,33 +19,12 @@ Digilent Basys3 FPGA에서 동작하는 **디지털 시계(Watch)와 스톱워�
 - 현재 시간을 별도 레지스터에 저장하는 Moment Capture / Hold 기능 구현
 - Stopwatch 시뮬레이션 시나리오 구성 및 Basys3 FPGA 동작 검증
 
-## 핵심 기능
 
-### Stopwatch Mode (`sw[1] = 0`)
+## 설계·구현
 
-- `btnR`: RUN / STOP 전환
-- `btnL`: CLEAR
-- `btnD`: UP / DOWN Count Mode 전환
-- `btnU`: Moment Capture / Hold 전환
+![FPGA Stopwatch & Watch block diagram](./assets/architecture.png)
 
-Moment 기능은 내부 카운터를 멈추지 않고 특정 시점의 값만 별도 레지스터에 저장해 표시합니다. Hold를 해제하면 계속 흐르던 실시간 값으로 복귀합니다.
-
-### Watch Mode (`sw[1] = 1`)
-
-- NORMAL / HOUR / MIN / SEC 상태를 갖는 FSM
-- `btnL`, `btnR`: 시간 설정 대상 선택
-- `btnU`, `btnD`: 선택된 시간 값 증가·감소
-- 현재 설정 상태를 LED로 표시
-
-### Display & Input
-
-- Basys3 100 MHz 시스템 클록을 100 Hz 시간 Tick으로 분주
-- `sw[0] = 0`: `sec / msec` 표시
-- `sw[0] = 1`: `hour / min` 표시
-- 1 kHz 기반 4-Digit 7-Segment Dynamic Multiplexing
-- 8-sample Shift Register와 Edge Detector 기반 Button Debounce
-
-## 설계 구조
+### 설계 구조
 
 | 블록 | 역할 |
 |---|---|
@@ -53,7 +37,36 @@ Moment 기능은 내부 카운터를 멈추지 않고 특정 시점의 값만 �
 | `fnd_controller` | 자릿수 분리, BCD 변환, FND Multiplexing |
 | `toptop` | 전체 시스템 통합 Top Module |
 
-## 검증 내용
+### 핵심 기능
+
+#### Stopwatch Mode (`sw[1] = 0`)
+
+- `btnR`: RUN / STOP 전환
+- `btnL`: CLEAR
+- `btnD`: UP / DOWN Count Mode 전환
+- `btnU`: Moment Capture / Hold 전환
+
+Moment 기능은 내부 카운터를 멈추지 않고 특정 시점의 값만 별도 레지스터에 저장해 표시합니다. Hold를 해제하면 계속 흐르던 실시간 값으로 복귀합니다.
+
+#### Watch Mode (`sw[1] = 1`)
+
+- NORMAL / HOUR / MIN / SEC 상태를 갖는 FSM
+- `btnL`, `btnR`: 시간 설정 대상 선택
+- `btnU`, `btnD`: 선택된 시간 값 증가·감소
+- 현재 설정 상태를 LED로 표시
+
+#### Display & Input
+
+- Basys3 100 MHz 시스템 클록을 100 Hz 시간 Tick으로 분주
+- `sw[0] = 0`: `sec / msec` 표시
+- `sw[0] = 1`: `hour / min` 표시
+- 1 kHz 기반 4-Digit 7-Segment Dynamic Multiplexing
+- 8-sample Shift Register와 Edge Detector 기반 Button Debounce
+
+
+## 검증 결과
+
+### 검증 내용
 
 - Reset 이후 Stopwatch RUN 진입과 100 Hz 기반 시간 증가
 - STOP 상태에서 CLEAR 및 Count Mode 변경
@@ -62,13 +75,27 @@ Moment 기능은 내부 카운터를 멈추지 않고 특정 시점의 값만 �
 - 7-Segment 출력 값과 자리 선택 신호 확인
 - Vivado Simulation 후 Basys3 보드에서 실제 동작 확인
 
-## Troubleshooting
+<a id="troubleshooting"></a>
+
+### 문제 해결
 
 - Tick과 시간 조정 버튼이 동시에 입력될 때 증가량이 누락되는 조건을 분리해 처리
 - 모듈과 Wire 증가로 신호 흐름이 복잡해진 문제를 Block Diagram과 I/O 정의로 재구성
 - 버튼 채터링으로 발생하는 중복 입력을 Debounce와 Edge Detection으로 안정화
 
-## 프로젝트 구조
+
+## 실행 방법
+
+### Vivado 실행 방법
+
+1. Vivado에서 RTL Project를 생성하고 Target Board를 Basys3로 선택합니다.
+2. `src/*.v`를 Design Sources에 추가합니다.
+3. `constraints/Basys-3-Master.xdc`를 Constraints에 추가합니다.
+4. `toptop`을 Top Module로 지정합니다.
+5. 시뮬레이션 시 `tb/tb_watch.v`를 Simulation Sources에 추가합니다.
+6. Synthesis, Implementation, Bitstream Generation 후 Basys3에 Program합니다.
+
+### 프로젝트 구조
 
 ```text
 fpga-stopwatch-watch/
@@ -91,11 +118,9 @@ fpga-stopwatch-watch/
     └── tb_watch.v
 ```
 
-## Vivado 실행 방법
 
-1. Vivado에서 RTL Project를 생성하고 Target Board를 Basys3로 선택합니다.
-2. `src/*.v`를 Design Sources에 추가합니다.
-3. `constraints/Basys-3-Master.xdc`를 Constraints에 추가합니다.
-4. `toptop`을 Top Module로 지정합니다.
-5. 시뮬레이션 시 `tb/tb_watch.v`를 Simulation Sources에 추가합니다.
-6. Synthesis, Implementation, Bitstream Generation 후 Basys3에 Program합니다.
+---
+
+[웹 포트폴리오](https://seungyeol-rtl-portfolio.azuretide33.chatgpt.site) · [GitHub 프로필](https://github.com/lsy49055089)
+
+[논문](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [AI / CV](https://github.com/lsy49055089/AI-Projects)

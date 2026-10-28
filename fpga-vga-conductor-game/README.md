@@ -1,9 +1,16 @@
 # FPGA VGA Conductor Game
 
-> **Team Project · 2026.08.31 - 2026.09.07**
-> 실제 소스 코드와 공동 작업 이력은 [원본 팀 저장소](https://github.com/realisshoon/fpga-vga-conductor-game)에서 확인할 수 있습니다.
+카메라 영상에서 지휘봉·손의 중심 좌표를 추출하는 RTL을 설계하고, UART로 PC의 MAESTRO UI와 연동했습니다.
 
-## Project Summary
+## 개요
+
+| 항목 | 내용 |
+|---|---|
+| 기간 | 2026.08.31–2026.09.07 |
+| 형태 | 7인 팀 프로젝트 |
+| 기술 | SystemVerilog · OV7670 · FPGA · UART · Python/PySide6 · MIDI |
+
+<a id="project-summary"></a>
 
 OV7670 카메라에서 입력된 영상을 FPGA에서 처리해 빨간색 지휘봉과 초록색 손 표식의 좌표를 추출하고, 지휘 패턴·속도·음량·점수를 계산한 뒤 UART로 Python PC 애플리케이션과 연동한 실시간 지휘 시뮬레이션 게임입니다.
 
@@ -11,50 +18,9 @@ FPGA는 영상 기반 좌표 추출과 게임 제어를 담당하고, PC 애플�
 
 [Original Team Repository](https://github.com/realisshoon/fpga-vga-conductor-game) · [Demo Video](https://github.com/realisshoon/fpga-vga-conductor-game/blob/main/docs/demo/%EC%A7%80%ED%9C%98%EA%B2%8C%EC%9E%84%20%EC%8B%9C%EC%97%B0%EC%98%81%EC%83%81.mp4) · [Final Presentation](https://github.com/realisshoon/fpga-vga-conductor-game/blob/main/docs/ppt/3%ED%8C%80_%EC%A7%80%ED%9C%98%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%EC%85%98%EA%B2%8C%EC%9E%84.pdf)
 
-## Demo
+## 담당 역할
 
-![4박 지휘 패턴 인식 및 게임 진행](https://raw.githubusercontent.com/realisshoon/fpga-vga-conductor-game/main/docs/images/demo-pattern-playing.jpg)
-
-![BPM 기반 점수 계산 화면](https://raw.githubusercontent.com/realisshoon/fpga-vga-conductor-game/main/docs/images/demo-bpm-score.jpg)
-
-### 군집화 적용 후 좌표 출력 및 PC UI 연동
-
-![군집화 적용 후 RED/GREEN 좌표를 표시한 MAESTRO UI](./docs/images/maestro-clustering-result.png)
-
-지휘봉·손 표식 이외의 빨강·초록 물체가 함께 검출되는 문제에 대응해 군집화를 적용했습니다. 산출한 좌표를 PC로 전달하여 검출 영상 위에 표시한 결과입니다. 군집화 적용 후의 좌표 출력 화면입니다.
-
-## System Flow
-
-```text
-OV7670 Camera
-    ↓
-Frame Buffer / VGA
-    ↓
-RGB Filter
-    ↓
-XY Detection
-    ↓
-Game Logic
-    ├─ Pattern FSM
-    ├─ Speed / Volume
-    ├─ Song Decoder
-    └─ Score
-    ↓
-UART Wrapper
-    ↓
-Python MAESTRO UI / MIDI / Capture
-```
-
-| Area | Implementation |
-|---|---|
-| Camera / Video | OV7670, 320×240 frame processing, VGA 640×480 output |
-| Object Tracking | RED/GREEN color detection, clustering, Bounding Box center coordinate |
-| Game Logic | 4-beat Zone FSM, tempo, volume, score, song selection |
-| Communication | Ready/Valid based internal transfer, UART PC link |
-| PC Application | PySide6 MAESTRO UI, MIDI playback, Capture ON/OFF, result scene |
-| Verification | Module TB + team-level UVM verification |
-
-## My Contribution
+<a id="my-contribution"></a>
 
 ### 1. `xy_detection` RTL Design & Verification
 
@@ -94,7 +60,45 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 - 프레임 기반 지휘 좌표 입력과 이전 좌표 저장 구조 설계
 - 좌표 차이 기반 속도 산출 방식 및 UART Ready/Valid 전달 규격 정의
 
-## Design Decisions
+
+## 설계·구현
+
+<a id="system-flow"></a>
+
+### 시스템 구조
+
+```text
+OV7670 Camera
+    ↓
+Frame Buffer / VGA
+    ↓
+RGB Filter
+    ↓
+XY Detection
+    ↓
+Game Logic
+    ├─ Pattern FSM
+    ├─ Speed / Volume
+    ├─ Song Decoder
+    └─ Score
+    ↓
+UART Wrapper
+    ↓
+Python MAESTRO UI / MIDI / Capture
+```
+
+| Area | Implementation |
+|---|---|
+| Camera / Video | OV7670, 320×240 frame processing, VGA 640×480 output |
+| Object Tracking | RED/GREEN color detection, clustering, Bounding Box center coordinate |
+| Game Logic | 4-beat Zone FSM, tempo, volume, score, song selection |
+| Communication | Ready/Valid based internal transfer, UART PC link |
+| PC Application | PySide6 MAESTRO UI, MIDI playback, Capture ON/OFF, result scene |
+| Verification | Module TB + team-level UVM verification |
+
+<a id="design-decisions"></a>
+
+### 설계 판단
 
 | Decision | Reason |
 |---|---|
@@ -104,34 +108,69 @@ Source: [`song_decoder.sv`](https://github.com/realisshoon/fpga-vga-conductor-ga
 | Ready/Valid handshake | 같은 프레임 내에서 유효 결과를 유지하고, 다음 Frame Done에서는 최신 좌표로 갱신 |
 | FPGA / PC role separation | 실시간 좌표·게임 판정은 FPGA, UI·MIDI·영상 연출은 PC가 담당해 각 플랫폼의 역할을 분리 |
 
-## Verification & Troubleshooting
 
-### Individual Scope
+## 검증 결과
+
+<a id="verification--troubleshooting"></a>
+
+### 검증과 문제 해결
+
+#### Individual Scope
 
 - `xy_detection` 좌표 출력 Testbench
 - `song_decoder` 곡 선택·BPM 출력 Testbench
 - Frame Delay 문제 재현 및 좌표 갱신 타이밍 수정
 - QVGA 좌표와 VGA/PC 표시 좌표 간 Scale 차이 확인 및 연동 규격 정리
 
-### 좌표 RTL 검증
+#### 좌표 RTL 검증
 
 기본 파라미터(RED 최소 후보 8개, GREEN 최소 후보 16개)와 320×240 전체 Raster 입력에서 **13개 프레임 조건 통과 / 오류 0건**을 확인했습니다. 좌표·40-bit Packet, Frame Done과 다음 Clock의 Valid, 미검출·Ready 대기·최신 프레임 갱신, 최소 후보 수 경계와 원거리 잡음을 검사합니다.
 
 검증 조건 · 2026.10.28 · Icarus Verilog 12.0 · [검증 조건과 실행 방법](verification/README.md) · [Testbench](verification/tb/tb_xy_detection.sv) · [실행 로그](verification/xy-regression.log)
 
-### Team-level Verification
+#### Team-level Verification
 
 팀 통합 검증에서는 RG Detect, Game Logic, UART Wrapper를 대상으로 UVM Scoreboard, Functional Coverage, Assertion을 적용했습니다.
 
-## Result
+<a id="demo"></a>
+
+### 시연 화면
+
+![4박 지휘 패턴 인식 및 게임 진행](https://raw.githubusercontent.com/realisshoon/fpga-vga-conductor-game/main/docs/images/demo-pattern-playing.jpg)
+
+![BPM 기반 점수 계산 화면](https://raw.githubusercontent.com/realisshoon/fpga-vga-conductor-game/main/docs/images/demo-bpm-score.jpg)
+
+#### 군집화 적용 후 좌표 출력 및 PC UI 연동
+
+![군집화 적용 후 RED/GREEN 좌표를 표시한 MAESTRO UI](./docs/images/maestro-clustering-result.png)
+
+지휘봉·손 표식 이외의 빨강·초록 물체가 함께 검출되는 문제에 대응해 군집화를 적용했습니다. 산출한 좌표를 PC로 전달하여 검출 영상 위에 표시한 결과입니다. 군집화 적용 후의 좌표 출력 화면입니다.
+
+<a id="result"></a>
+
+### 구현 결과
 
 카메라 영상에서 추출한 지휘봉·손 좌표를 FPGA 게임 로직과 PC 애플리케이션까지 연결하면서, **Frame 단위 영상 데이터 → RTL 좌표 처리 → Handshake → UART → UI/MIDI**로 이어지는 시스템에서 좌표 처리 RTL과 PC UI 연동을 담당했습니다.
 
 특히 `xy_detection`의 Frame Delay와 QVGA/VGA 좌표 기준 차이를 직접 확인하면서, 기능 구현뿐 아니라 **모듈 간 Timing과 Interface 기준을 맞추는 과정이 시스템 통합에서 중요하다는 점**을 경험했습니다.
 
-## Repository & Ownership
+
+## 실행 방법
+
+<a id="repository--ownership"></a>
+
+### 소스와 발표 자료
 
 - **Original Team Repository:** [realisshoon/fpga-vga-conductor-game](https://github.com/realisshoon/fpga-vga-conductor-game)
 - **Project Type:** 7-person Team Project
 - **Source:** RTL/Python 소스와 공동 작업 이력은 원본 팀 저장소에서 확인할 수 있습니다.
 
+
+> 실제 소스 코드와 공동 작업 이력은 [원본 팀 저장소](https://github.com/realisshoon/fpga-vga-conductor-game)에서 확인할 수 있습니다.
+
+
+---
+
+[웹 포트폴리오](https://seungyeol-rtl-portfolio.azuretide33.chatgpt.site) · [GitHub 프로필](https://github.com/lsy49055089)
+
+[논문](https://github.com/lsy49055089/Parallel-Decision-Tree-Hardware) · [RTL / FPGA Design](https://github.com/lsy49055089/RTL-Design-Projects) · [Design Verification](https://github.com/lsy49055089/RTL-Verification-Projects) · [Embedded Systems](https://github.com/lsy49055089/Embedded-Systems-Projects) · [AI / CV](https://github.com/lsy49055089/AI-Projects)
